@@ -33,6 +33,11 @@ class jTwitter{
      protected static function init(){
           if (!self::$initialized) {
                
+               if(!is_numeric(self::$expire_ago)){
+                    self::$expire_ago = strtotime("+".self::$expire_ago) - time();
+               }
+               
+               
                self::$cache_dir_name = $GLOBALS['gJConfig']->urlengine['basePath'].self::$cache_dir;
                self::$cache_dir = JELIX_APP_WWW_PATH.self::$cache_dir;
                
@@ -129,20 +134,17 @@ class jTwitter{
      }
      
   protected static function isCacheValid ($file_path) {
-    if (file_exists($file_path))
-    {
-      if (filectime($file_path) < strtotime("+".self::$expire_ago))
-      {
-        // file exists and cache is valid
-        return true;
-      }
-      else
-      {
-        // file exists but cache has expired
-        unlink($file_path);
-      }
-    }
-
+     if (file_exists($file_path)) {
+     
+          if ( (filectime($file_path) + self::$expire_ago) > time()) {
+               // file exists and cache is valid   
+               return true;
+          }
+          else {
+               // file exists but cache has expired
+               unlink($file_path);
+          }
+     }
     // no file
     return false;
   }
