@@ -1,14 +1,17 @@
 <?php
 
 /**
- * @package jTwitter
- * @author Florian Lonqueu-Brochard
- *
- **/
+*@package jTwitter
+* @author    Florian Lonqueu-Brochard
+* @copyright 2010-2011 Florian Lonqueu-Brochard
+* @license    MIT
+*/
+
 class jTwitter{
      
      public static $default_count = '3';
-     public static $expire_ago = '1 hour';
+     //public static $expire_ago = '3 hours';
+     public static $expire_ago = '0 hours';
      
      public static $cache_dir = 'uploads/jTwitter/' ; //relative to www path
      public static $cache_dir_name;
@@ -37,7 +40,6 @@ class jTwitter{
                     self::$expire_ago = strtotime("+".self::$expire_ago) - time();
                }
                
-               
                self::$cache_dir_name = $GLOBALS['gJConfig']->urlengine['basePath'].self::$cache_dir;
                self::$cache_dir = JELIX_APP_WWW_PATH.self::$cache_dir;
                
@@ -47,7 +49,7 @@ class jTwitter{
      
      
      protected function buildTimelinePath () {
-          return 'http://api.twitter.com/1/statuses/user_timeline.json?screen_name='.$this->user.'&count='.$this->count;
+          return 'http://api.twitter.com/1/statuses/user_timeline.json?screen_name='.$this->user.'&count='.($this->count+1); //dunno why twitter return count -1 results
      }
      
      
@@ -127,13 +129,9 @@ class jTwitter{
                     );
           
           return preg_replace(array_keys($replace), array_values($replace), $text);
-          
-          //return preg_replace('/(http:\/\/[^ ]*)/i', '<a href="$1">$1</a>', $text);
-          
-          //return $text;
      }
      
-  protected static function isCacheValid ($file_path) {
+  protected static function isValidCache ($file_path) {
      if (file_exists($file_path)) {
      
           if ( (filectime($file_path) + self::$expire_ago) > time()) {
@@ -155,7 +153,7 @@ class jTwitter{
           $hash = md5($user.'-'.$count.'-'.$doParsing);
           $cacheFile = self::$cache_dir.$hash.'.txt';
           
-          if (file_exists($cacheFile) && self::isCacheValid($cacheFile)){       
+          if (self::isValidCache($cacheFile)){
                return unserialize( jFile::read($cacheFile) );
           }
           else {
@@ -169,14 +167,5 @@ class jTwitter{
           }
          
      }
-
-/*
-     //Mock
-     $timelineOriginal[] = (object)(array('text' => '5 minutes avant ', 'created_at' => date('r', time()-5*60)));
-     $timelineOriginal[] = (object)(array('text' => '4heures avant ', 'created_at' => date('r', time()-60*60*4)));
-     $timelineOriginal[] = (object)(array('text' => '16heures avant ', 'created_at' => date('r', time()-60*60*16)));
-     $timelineOriginal[] = (object)(array('text' => '25heures avant ', 'created_at' => date('r', time()-60*60*25)));
-     $timelineOriginal[] = (object)(array('text' => '45heures avant ', 'created_at' => date('r', time()-60*60*45)));
-*/
 
 }

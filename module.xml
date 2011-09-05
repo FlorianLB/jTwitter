@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module xmlns="http://jelix.org/ns/module/1.0">
     <info id="jTwitter" name="jTwitter" createdate="2010-10-12">
-        <version stability="1.0b" date="">1.0b</version>
+        <version stability="1.0b" date="">1.1</version>
         <label lang="en_EN">jTwitter</label>
         <description lang="en_EN" />
-        <license URL="">All right reserved</license>
-        <copyright>2010 Florian Lonqueu-Brochard</copyright>
-        <creator name="Florian Lonqueu-Brochard" email="contact@andromedecreations.fr" active="true"/>
+        <license URL="">MIT</license>
+        <copyright>2010-2011 Florian Lonqueu-Brochard</copyright>
+        <creator name="Florian Lonqueu-Brochard" active="true"/>
         <homepageURL>http://andromedecreations.fr</homepageURL>
     </info>
     <dependencies>
-        <jelix minversion="1.2b1" maxversion="1.*"/>
+        <jelix minversion="1.2.*" maxversion="1.3.*"/>
     </dependencies>
 </module>
